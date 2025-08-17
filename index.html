@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Mentor - 30 Minit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            height: 90%;
+            max-height: 700px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            display: none;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .slide h2 {
+            color: #34495e;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            margin-top: 25px;
+        }
+
+        .slide h3 {
+            color: #555;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .quote {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.1em;
+            color: #2c3e50;
+            border-radius: 5px;
+        }
+
+        .objectives {
+            background: #e8f4fd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .objectives h3 {
+            color: #2980b9;
+            margin-bottom: 15px;
+        }
+
+        .objectives ul {
+            margin-left: 20px;
+        }
+
+        .objectives li {
+            margin-bottom: 8px;
+            color: #34495e;
+            line-height: 1.5;
+        }
+
+        .mentor-roles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .role-item {
+            background: #f1f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .role-item strong {
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .phase-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .phase-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-top: 5px solid #667eea;
+        }
+
+        .phase-box h3 {
+            color: #2980b9;
+            margin-bottom: 15px;
+        }
+
+        .dynamic-chart {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 30px auto;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .axis {
+            position: absolute;
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .axis-horizontal {
+            width: 380px;
+            height: 3px;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+        }
+
+        .axis-vertical {
+            width: 3px;
+            height: 380px;
+            left: 50%;
+            top: 10px;
+            transform: translateX(-50%);
+        }
+
+        .quadrant-text {
+            position: absolute;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 150px;
+        }
+
+        .top-text { top: 20px; left: 50%; transform: translateX(-50%); }
+        .bottom-text { bottom: 20px; left: 50%; transform: translateX(-50%); }
+        .left-text { left: 20px; top: 50%; transform: translateY(-50%); }
+        .right-text { right: 20px; top: 50%; transform: translateY(-50%); }
+
+        .model-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .step {
+            flex: 1;
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step h4 {
+            color: #2980b9;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .meeting-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .meeting-info h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .key-points {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .key-points h3 {
+            color: #155724;
+            margin-bottom: 15px;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .intro-image {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 4em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
+    </div>
+
+    <div class="slide-container">
+        <!-- Slide 1: Pengenalan -->
+        <div class="slide active">
+            <h1>The Mentoring Journey</h1>
+            <div class="intro-image">🛤️</div>
+            
+            <div class="quote">
+                "Mentoring itu satu perjalanan. Ia bukan tentang memenuhi 'nafsu' kita untuk 'mengajar'. Kita mahu mencapai satu titik pertemuan untuk saling belajar. Meet your mentee where they are and walk the journey together, side by side."
+            </div>
+
+            <h2>Apa itu Mentoring?</h2>
+            <ul>
+                <li><strong>Mentoring:</strong> Hubungan jangka panjang yang membuka perspektif dan ufuk</li>
+                <li><strong>Coaching:</strong> Fokus jangka pendek pada kemahiran/kompetensi tertentu</li>
+            </ul>
+
+            <div class="objectives">
+                <h3>Objektif Latihan Hari Ini</h3>
+                <ul>
+                    <li>Memahami peranan mentor yang berkesan</li>
+                    <li>Membina rapport yang kukuh dengan mentee</li>
+                    <li>Menguasai kemahiran komunikasi dalam mentoring</li>
+                    <li>Menguruskan temujanji dan komitmen dengan baik</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Peranan Mentor -->
+        <div class="slide">
+            <h1>Peranan Mentor</h1>
+            
+            <p style="font-size: 1.2em; color: #2c3e50; text-align: center; margin-bottom: 30px;">
+                Peranan mentor adalah <strong>fleksibel</strong> dan didorong oleh <strong>keperluan mentee</strong>
+            </p>
+
+            <h2>Akronim M.E.N.T.O.R.</h2>
+            <div class="mentor-roles">
+                <div class="role-item">
+                    <strong>M</strong> - Manage the relationship<br>
+                    <em>Mengurus hubungan dengan mentee</em>
+                </div>
+                <div class="role-item">
+                    <strong>E</strong> - Encourage<br>
+                    <em>Menggalakkan dan mengakui kebolehan mentee</em>
+                </div>
+                <div class="role-item">
+                    <strong>N</strong> - Nurture<br>
+                    <em>Memupuk persekitaran yang terbuka dan jujur</em>
+                </div>
+                <div class="role-item">
+                    <strong>T</strong> - Teaches<br>
+                    <em>Mewujudkan persekitaran yang mencabar mentee</em>
+                </div>
+                <div class="role-item">
+                    <strong>O</strong> - Offers mutual respect<br>
+                    <em>Menawarkan rasa hormat bersama</em>
+                </div>
+                <div class="role-item">
+                    <strong>R</strong> - Responds to mentees' needs<br>
+                    <em>Bertindak balas terhadap keperluan mentee</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Fasa Permulaan -->
+        <div class="slide">
+            <h1>Fasa Permulaan Hubungan Mentoring</h1>
+            <h2 style="text-align: center; color: #667eea;">Pembinaan Rapport & Penetapan Arah</h2>
+
+            <div class="phase-content">
+                <div class="phase-box">
+                    <h3>📝 Pembinaan Rapport</h3>
+                    <ul>
+                        <li>Fasa pertama yang <strong>kritikal</strong></li>
+                        <li>Mentor dan mentee menilai keserasian untuk bekerja bersama</li>
+                        <li>Fokus pada penyelarasan nilai</li>
+                        <li>Pembinaan rasa hormat bersama</li>
+                        <li>Penetapan jangkaan yang jelas</li>
+                        <li>Mewujudkan persekitaran terbuka dan jujur</li>
+                    </ul>
+                </div>
+
+                <div class="phase-box">
+                    <h3>🎯 Penetapan Arah</h3>
+                    <ul>
+                        <li>Mentee menetapkan objektif dan matlamat</li>
+                        <li>Mentor membantu mentee mengembangkan matlamat yang praktikal</li>
+                        <li>Memastikan matlamat adalah realistik dan dapat dicapai</li>
+                        <li>Menetapkan ukuran kejayaan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Sesi Mentoring yang Dinamik -->
+        <div class="slide">
+            <h1>Sesi Mentoring yang Dinamik</h1>
+            <h2 style="text-align: center;">Bagaimana kita membawa diri dan emosi?</h2>
+
+            <div class="dynamic-chart">
+                <div class="axis axis-horizontal"></div>
+                <div class="axis axis-vertical"></div>
+                
+                <div class="quadrant-text top-text">FAHAM DENGAN EMPATI<br><small>bertanya soalan dan mendengar</small></div>
+                <div class="quadrant-text bottom-text">BERI DENGAN MAKNA<br><small>kongsikan pengetahuan dan ilmu serta kebijaksanaan</small></div>
+                <div class="quadrant-text left-text">CABAR DENGAN SABAR<br><small>beri pandangan dan perspektif berbeza</small></div>
+                <div class="quadrant-text right-text">SOKONG DENGAN BERHATI-HATI<br><small>dorong dan bina keyakinan</small></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px; color: #666;">
+                <em>Mentor yang baik bercakap kurang dari 20% masa mesyuarat</em>
+            </div>
+        </div>
+
+        <!-- Slide 5: Kemahiran Komunikasi -->
+        <div class="slide">
+            <h1>Kemahiran Komunikasi dalam Mentoring</h1>
+            <h2>Model 'The Skilled Helper' (Gerald Egan)</h2>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <strong>Kemahiran Teras:</strong> Empati • Mendengar Aktif • Soalan Terbuka • Kejujuran • Tidak Menghakimi
+            </div>
+
+            <div class="model-steps">
+                <div class="step">
+                    <h4>Peringkat 1</h4>
+                    <strong>What's Going On?</strong>
+                    <p>Mentee menggariskan isu/situasi semasa</p>
+                </div>
+                <div class="step">
+                    <h4>Peringkat 2</h4>
+                    <strong>What Do I Need or Want?</strong>
+                    <p>Mentee bekerjasama dengan mentor untuk menentukan matlamat sebenar mereka</p>
+                    <small style="color: #e74c3c;"><em>*Peringkat kritikal yang sering terlepas pandang</em></small>
+                </div>
+                <div class="step">
+                    <h4>Peringkat 3</h4>
+                    <strong>How Do I Get What I Need or Want?</strong>
+                    <p>Mentor membantu mentee meninjau pilihan dan merancang tindakan</p>
+                </div>
+            </div>
+
+            <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                <strong>Ingat:</strong> Model ini menyediakan struktur untuk perbualan yang berkesan dan membantu menyelesaikan masalah secara sistematik.
+            </div>
+        </div>
+
+        <!-- Slide 6: Menguruskan Perjalanan -->
+        <div class="slide">
+            <h1>Menguruskan Perjalanan</h1>
+            <h2>Temujanji & Komitmen</h2>
+
+            <div class="meeting-info">
+                <h3>⚠️ Penting untuk Diingat</h3>
+                <p><strong>Mentoring adalah "hubungan berterusan"</strong> dan bukannya interaksi sekali-sekala.</p>
+                <p>Memerlukan: <strong>Masa • Komitmen • Komunikasi • Kerahsiaan</strong></p>
+            </div>
+
+            <h2>Kekerapan Perjumpaan</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="background: #ffe6e6; padding: 20px; border-radius: 10px; border-left: 5px solid #e74c3c;">
+                    <h3 style="color: #c0392b;">❌ Terlalu Jarang</h3>
+                    <p>Bertemu kurang dari sekali suku tahun <strong>tidak kondusif</strong> untuk mengekalkan hubungan</p>
+                </div>
+                <div style="background: #ffe6e6; padding: 20px; border-radius: 10px; border-left: 5px solid #e74c3c;">
+                    <h3 style="color: #c0392b;">❌ Terlalu Kerap</h3>
+                    <p>Bertemu lebih dari sekali sebulan mungkin menunjukkan <strong>masalah dengan tahap penyeliaan lain</strong></p>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h3>✅ Amalan Terbaik</h3>
+                <ul>
+                    <li>Mentor perlu "tersedia kepada mentee secara berkala"</li>
+                    <li>Gariskan tahap komitmen masa yang diharapkan pada permulaan hubungan</li>
+                    <li>Buat jadual tetap dan patuhi komitmen tersebut</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Kesimpulan -->
+        <div class="slide">
+            <h1>Kesimpulan</h1>
+            <h2 style="text-align: center; color: #667eea;">Terus Belajar dan Berkembang</h2>
+
+            <div style="text-align: center; margin: 30px 0; font-size: 3em;">🌱</div>
+
+            <div class="key-points">
+                <h3>Ringkasan Poin Utama</h3>
+                <ul>
+                    <li><strong>Rapport:</strong> Asas hubungan mentoring yang berkesan</li>
+                    <li><strong>Komunikasi:</strong> Gunakan model 'Skilled Helper' untuk struktur yang jelas</li>
+                    <li><strong>Temujanji:</strong> Komitmen dan konsistensi adalah kunci</li>
+                </ul>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; text-align: center; margin: 30px 0;">
+                <h2 style="color: #2c3e50; margin-bottom: 20px;">Ingatlah...</h2>
+                <p style="font-size: 1.3em; line-height: 1.8; color: #34495e;">
+                    <strong>Mentoring adalah proses pembelajaran kolaboratif.</strong><br>
+                    Terus refleksi dan membangunkan kemahiran interpersonal anda sendiri.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <h3 style="color: #667eea;">Terima Kasih!</h3>
+                <p>Semoga berjaya dengan perjalanan mentoring anda.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Sebelum</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Seterusnya →</button>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                currentSlideIndex = newIndex;
+                showSlide(currentSlideIndex);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
